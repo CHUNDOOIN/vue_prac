@@ -49,6 +49,13 @@ export default {
             this.$emit("closeModal", this.room.id);
         },
     },
+    updated() {
+        if (this.month === "2") {
+            alert("우린 3개월부터유");
+            this.month = 3;
+            console.log("3으로 강제적으로 변경됩니다.");
+        }
+    },
     components: {},
 };
 </script>

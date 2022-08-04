@@ -1,19 +1,29 @@
 <template>
-    <Modal
-        @closeModal="
-            isOpen = false;
-            clickMove = $event;
-        "
-        :room="myRoomData"
-        :isOpen="isOpen"
-        :clickMove="clickMove"
-    />
+    <transition name="fade">
+        <Modal
+            @closeModal="
+                isOpen = false;
+                clickMove = $event;
+            "
+            :room="myRoomData"
+            :isOpen="isOpen"
+            :clickMove="clickMove"
+        />
+    </transition>
 
     <div class="menu">
         <a v-for="a in menu" :key="a">{{ a }}</a>
     </div>
 
-    <Discount />
+    <Discount v-if="showDiscount === true" />
+
+    <div class="btn-box">
+        <button @click="minSort">최저가순</button>
+        <button @click="maxSort">최고가순</button>
+        <button @click="abcSort">가나다순</button>
+        <button @click="fiftySort">50만 이하</button>
+        <button @click="sortBack">되돌리기</button>
+    </div>
 
     <Card
         @openModal="
@@ -52,7 +62,9 @@ export default {
     // vue 변수 담아두는 방법
     data() {
         return {
+            showDiscount: true,
             clickMove: 0,
+            myRoomDataOriginal: [...roomData],
             myRoomData: roomData,
             isOpen: false,
             menu: ["Home", "Shop", "About"],
@@ -66,7 +78,34 @@ export default {
         increase() {
             this.신고수++;
         },
+
+        sortBack() {
+            this.myRoomData = [...this.myRoomDataOriginal];
+        },
+        minSort() {
+            this.myRoomData.sort((a, b) => a.price - b.price);
+            console.log("최저가순 정렬 완료");
+        },
+        maxSort() {
+            this.myRoomData.sort((a, b) => b.price - a.price);
+            console.log("최고가순 정렬 완료");
+        },
+        abcSort() {
+            this.myRoomData.sort((a, b) => (a > b ? 1 : -1));
+            // console.log(this.myRoomData[0].title[0]);
+            console.log("가나다순 정렬 완료");
+        },
+        fiftySort() {
+            this.myRoomData = this.myRoomData
+                .filter((el) => el.price <= 500000)
+                .sort((a, b) => a.price - b.price);
+        },
     },
+    // mounted() {
+    //     setTimeout(() => {
+    //         this.showDiscount = false;
+    //     }, 2000);
+    // },
     components: { Discount, Modal, Card },
 };
 </script>
@@ -117,5 +156,32 @@ div {
 .menu a {
     color: white;
     padding: 10px;
+}
+
+/* 모달창 애니메이션 */
+.fade-enter-from {
+    transform: translateY(-1000px);
+}
+.fade-enter-active {
+    transition: all 1s;
+}
+.fade-enter-to {
+    transform: translateY(0px);
+}
+
+.fade-leave-from {
+    opacity: 1;
+}
+.fade-leave-active {
+    transition: all 1s;
+}
+.fade-leave-to {
+    opacity: 0;
+}
+
+.btn-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 </style>
