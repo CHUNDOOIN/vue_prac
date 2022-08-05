@@ -91,8 +91,8 @@ export default {
             console.log("최고가순 정렬 완료");
         },
         abcSort() {
-            this.myRoomData.sort((a, b) => (a > b ? 1 : -1));
-            // console.log(this.myRoomData[0].title[0]);
+            this.myRoomData.sort((a, b) => (a.title > b.title ? 1 : -1));
+            console.log(this.myRoomData);
             console.log("가나다순 정렬 완료");
         },
         fiftySort() {
